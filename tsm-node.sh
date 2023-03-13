@@ -1,3 +1,3 @@
 #!/bin/bash
 
-node --loader tsm-node $1
+node --loader tesm-node $1

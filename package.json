@@ -1,5 +1,5 @@
 {
-  "name": "tsm-node",
+  "name": "tesm-node",
   "version": "1.0.0",
   "description": "A custom module loader for node to load typescript modules as esm.",
   "license": "MIT",
@@ -32,17 +32,17 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "tsm-node.sh"
+    "tesm-node.sh"
   ],
-  "bin": "tsm-node.sh",
+  "bin": "tesm-node.sh",
   "author": "@ryegoree (https://twitter.com/ryegoree)",
-  "homepage": "https://github.com/ryangoree/tsm-node",
+  "homepage": "https://github.com/ryangoree/tesm-node",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ryangoree/tsm-node"
+    "url": "https://github.com/ryangoree/tesm-node"
   },
   "bugs": {
-    "url": "https://github.com/ryangoree/tsm-node/issues"
+    "url": "https://github.com/ryangoree/tesm-node/issues"
   },
   "keywords": [
     "typescript",

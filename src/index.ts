@@ -1,15 +1,15 @@
 import { resolve as resolveTs } from 'ts-node/esm'
 
-let matchPath: (path: string) => unknown
+let matchPath: (path: string) => string | undefined = (path: string) => path
 let hasTSConfigPaths = false
 
 // Optionally load tsconfig-paths to resolve path aliases from tsconfig.
 try {
   const tsConfigPaths = await import('tsconfig-paths')
-  
+
   hasTSConfigPaths = true
   const config = tsConfigPaths.loadConfig()
-  
+
   if (!('absoluteBaseUrl' in config)) {
     throw 'Unable to load tsconfig'
   }
@@ -25,9 +25,13 @@ try {
 export { getFormat, transformSource, load } from 'ts-node/esm'
 
 // Use a custom resolver for import paths.
-export async function resolve(specifier: string, context: unknown, defaultResolver: unknown) {
+export async function resolve(
+  specifier: string,
+  context: ResolveContext,
+  defaultResolver: unknown
+) {
   // See if the path matches one of the paths from tsconfig.
-  const mappedSpecifier = matchPath?.(specifier) || specifier
+  const mappedSpecifier = matchPath(specifier)
 
   // If it matches and is missing a file extension, append .js to it.
   // Extensions are required in es modules.

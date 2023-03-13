@@ -1,7 +1,11 @@
 # tesm-node
 
-A thin wrapper around [ts-node](https://github.com/TypeStrong/ts-node) that adds
-support for [tsconfig paths](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping) and importing files [without file extensions](https://nodejs.org/api/esm.html#mandatory-file-extensions).
+A thin wrapper around [ts-node-esm](https://github.com/TypeStrong/ts-node) that adds
+support for [tsconfig
+paths](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping)
+and importing files [without file
+extensions](https://nodejs.org/api/esm.html#mandatory-file-extensions) when
+developing in TypeScript with ESM.
 
 ## Install
 

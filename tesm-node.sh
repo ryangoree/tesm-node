@@ -1,3 +1,21 @@
 #!/bin/bash
 
-node --loader tesm-node $1
+for i in "$@"; do
+  case $i in
+    -*=*|--*=*)
+      OPTIONS+="${i#*=}"
+      shift # past argument=value
+      ;;
+    -*|--*)
+      OPTIONS+="$1 $2"
+      shift # past argument
+      shift # past value
+      ;;
+    *)
+      SRC+="$1" # save positional arg
+      shift # past argument
+      ;;
+  esac
+done
+
+node --loader tesm-node $OPTIONS $SRC

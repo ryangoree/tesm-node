@@ -1,6 +1,6 @@
 {
   "name": "tesm-node",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A custom module loader for node to load typescript modules as esm.",
   "license": "MIT",
   "type": "module",

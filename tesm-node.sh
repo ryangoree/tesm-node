@@ -12,10 +12,10 @@ for i in "$@"; do
       shift # past value
       ;;
     *)
-      SRC+="$1" # save positional arg
+      POSITIONAL+="$1 " # save positional arg
       shift # past argument
       ;;
   esac
 done
 
-node --loader tesm-node $OPTIONS $SRC
+node --loader tesm-node $OPTIONS $POSITIONAL

@@ -18,4 +18,4 @@ for i in "$@"; do
   esac
 done
 
-node --loader tesm-node $OPTIONS $POSITIONAL
+node --loader tesm-node $POSITIONAL $OPTIONS

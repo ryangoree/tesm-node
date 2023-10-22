@@ -1,21 +1,29 @@
 #!/bin/bash
 
+POSITIONAL=""
+OPTIONS=""
+skipNext=false
+
 for i in "$@"; do
+  if [ "$skipNext" = true ]; then
+    skipNext=false
+    shift
+    continue
+  fi
+
   case $i in
     -*=*|--*=*)
-      OPTIONS+="${i#*=}"
-      shift # past argument=value
+      OPTIONS+="${i%%=*} ${i#*=} "
       ;;
     -*|--*)
-      OPTIONS+="$1 $2"
-      shift # past argument
-      shift # past value
+      OPTIONS+="$i $2 "
+      skipNext=true
       ;;
     *)
-      POSITIONAL+="$1 " # save positional arg
-      shift # past argument
+      POSITIONAL+="$i "
       ;;
   esac
+  shift
 done
 
 node --loader tesm-node $POSITIONAL $OPTIONS

@@ -31,22 +31,36 @@ export async function resolve(
   defaultResolver: unknown
 ) {
   // See if the path matches one of the paths from tsconfig.
-  const mappedSpecifier = matchPath(specifier)
-
-  // If it matches and is missing a file extension, append .js to it.
-  // Extensions are required in es modules.
-  // see: https://nodejs.org/api/esm.html#mandatory-file-extensions
-  if (mappedSpecifier && isMissingExtension(specifier)) {
-    specifier = `${mappedSpecifier}.js`
-  }
+  specifier =
+    matchPath(specifier) ||
+    // '.js' extensions are required in node16+, but matchPath won't match '.js'
+    // paths to '.ts' paths, so we convert it if the '.js' path doesn't match.
+    matchPath(convertToTsExtension(specifier)) ||
+    specifier
 
   // Try to resolve the path with ts-node/esm.
   try {
     return await resolveTs(specifier, context, defaultResolver)
   } catch (err) {
     // If it fails and is missing a file extension, append .js to it.
+    // Extensions are required in es modules.
+    // see: https://nodejs.org/api/esm.html#mandatory-file-extensions
     if (isMissingExtension(specifier)) {
-      return resolveTs(`${specifier}.js`, context, defaultResolver)
+      try {
+        return await resolveTs(`${specifier}.js`, context, defaultResolver)
+      } catch (err) {
+        if (!isDirImportError(err)) throw err
+
+        // If it fails to resolve a file and there's a directory with the same
+        // name, try to resolve the index file in the directory.
+        return (
+          resolveTs(`${specifier}/index.js`, context, defaultResolver) as any
+        ).catch(() => {
+          // If it fails to resolve the index file, throw the original error to
+          // avoid confusing the user.
+          throw err
+        })
+      }
     }
 
     if (!hasTSConfigPaths) {
@@ -90,5 +104,52 @@ function boldLog(msg: string) {
  * @returns {boolean}
  */
 function isMissingExtension(path: string) {
-  return /^(.*\/)?[^\.]+$/.test(path)
+  return !/\.\w+$/.test(path)
+}
+
+/**
+ * Check if an error is a module not found error.
+ * @param err - The error to check.
+ * @returns {boolean}
+ */
+function isDirImportError(err: any) {
+  return /ERR_UNSUPPORTED_DIR_IMPORT/.test(err.toString())
+}
+
+/**
+ * Removes the file extension from a string.
+ *
+ * @example
+ * removeFileExtension('foo.txt') // => 'foo'
+ *
+ * @group Utils
+ */
+export function removeFileExtension(str: string): string {
+  return str.replace(/(?<!\.)\.[^.]+$/, '')
+}
+
+/**
+ * Converts a file extension to a TypeScript file extension.
+ *
+ * @example
+ * convertToTsExtension('foo.js') // => 'foo.ts'
+ * convertToTsExtension('foo.jsx') // => 'foo.tsx'
+ * convertToTsExtension('foo.mjs') // => 'foo.mts'
+ * convertToTsExtension('foo.cjs') // => 'foo.cts'
+ *
+ * @group Utils
+ */
+export function convertToTsExtension(str: string): string {
+  const [fileName, extension] = str.split(/(?<!\.)(?=\.[^.]+$)/)
+  if (!extension) return str
+  const tsExtension = tsExtensionMap[extension]
+  if (!tsExtension) return str
+  return `${fileName}${tsExtension}`
+}
+
+const tsExtensionMap: Record<string, string> = {
+  '.js': '.ts',
+  '.jsx': '.tsx',
+  '.mjs': '.mts',
+  '.cjs': '.cts',
 }

@@ -1,14 +1,14 @@
 {
   "name": "tesm-node",
   "version": "1.2.0",
-  "description": "A custom module loader for node to load typescript modules as esm.",
+  "description": "TypeScript execution for ESM that just works.",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "tsup"
   },
   "dependencies": {
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/node": "^18.15.1",
@@ -20,7 +20,7 @@
     "tsconfig-paths": ">=4"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=14"
   },
   "exports": "./dist/index.js",
   "main": "dist/index.js",

@@ -25,9 +25,9 @@
   "main": "dist/index.js",
   "files": [
     "dist",
-    "tesm-node.sh"
+    "bin"
   ],
-  "bin": "tesm-node.sh",
+  "bin": "bin/tesm-node.sh",
   "author": "@ryegoree (https://twitter.com/ryegoree)",
   "homepage": "https://github.com/ryangoree/tesm-node",
   "repository": {

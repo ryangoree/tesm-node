@@ -1,3 +1,6 @@
+> [!CAUTION]
+> **This project has been deprecated in favor of [tsx](https://github.com/privatenumber/tsx) and will no longer be maintained.**
+
 # tesm-node
 
 A thin wrapper around [ts-node-esm](https://github.com/TypeStrong/ts-node) that
